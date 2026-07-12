@@ -13,10 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Bricolage+Grotesque:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
-    <asp:PlaceHolder runat="server">
-        <%: Scripts.Render("~/bundles/modernizr") %>
-    </asp:PlaceHolder>
-
     <webopt:bundlereference runat="server" path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
@@ -25,36 +21,36 @@
     <form runat="server">
         <asp:ScriptManager runat="server">
             <Scripts>
-                <asp:ScriptReference Name="MsAjaxBundle" />
                 <asp:ScriptReference Name="jquery" />
-                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
-                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
-                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
-                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
-                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
-                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
-                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
-                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
-                <asp:ScriptReference Name="WebFormsBundle" />
             </Scripts>
         </asp:ScriptManager>
 
         <nav class="navbar navbar-expand-lg fixed-top">
             <div class="container">
                 <a class="navbar-brand" runat="server" href="~/">
-                    <i class="bi bi-chat-dots-fill"></i> Relay
+                    <i class="bi bi-chat-dots-fill"></i> Relay Chat
                 </a>
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
-                        <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Security</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Journal</a></li>
-                        <li class="nav-item"><a class="btn btn-ink nav-cta ms-lg-2" href="#">Get Relay</a></li>
+                    <ul class="navbar-nav me-auto align-items-lg-center gap-1">
+                        <li class="nav-item"><a class="nav-link scroll-link" href="#features">Features</a></li>
+                        <li class="nav-item"><a class="nav-link scroll-link" href="#how-it-works">How it works</a></li>
+                    </ul>
+                    <ul class="navbar-nav align-items-lg-center gap-1">
+                        <asp:LoginView runat="server">
+                            <AnonymousTemplate>
+                                <li class="nav-item"><a class="nav-link" href="Login">Sign in</a></li>
+                                <li class="nav-item"><a class="btn btn-ink nav-cta ms-lg-2" href="Register">Get started</a></li>
+                            </AnonymousTemplate>
+                            <LoggedInTemplate>
+                                <li class="nav-item"><a class="nav-link" href="Chat">Chats</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+                                <li class="nav-item"><a class="btn btn-outline-ink nav-cta ms-lg-2" href="Logout">Sign out</a></li>
+                            </LoggedInTemplate>
+                        </asp:LoginView>
                     </ul>
                 </div>
             </div>
@@ -70,9 +66,9 @@
                 <div class="row align-items-center g-4">
                     <div class="col-md-4">
                         <a class="navbar-brand" runat="server" href="~/">
-                            <i class="bi bi-chat-dots-fill"></i> Relay
+                            <i class="bi bi-chat-dots-fill"></i> Relay Chat
                         </a>
-                        <p class="footer-text mt-2 mb-0">&copy; <%: DateTime.Now.Year %> - a magazine for minds.</p>
+                        <p class="footer-text mt-2 mb-0">&copy; <%: DateTime.Now.Year %> - Relay Chat</p>
                     </div>
                     <div class="col-md-8 text-md-end">
                         <span class="me-4 footer-text">Journal</span>
@@ -89,6 +85,9 @@
     </form>
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/Scripts/bootstrap.bundle.js") %>
+        <script src="Scripts/jquery.signalR-2.4.3.min.js"></script>
+        <script src="/signalr/hubs"></script>
+        <script src="Scripts/app.js"></script>
     </asp:PlaceHolder>
 </body>
 </html>

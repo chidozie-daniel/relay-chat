@@ -95,7 +95,7 @@ li,
   color: #fff;
   font-weight: 600;
   padding: 0.8rem 2.4rem;
-  border-radius: 60px;
+  border-radius: 8px;
   transition: all 0.25s ease;
   letter-spacing: 0;
 }
@@ -113,7 +113,7 @@ li,
   color: var(--ink);
   font-weight: 600;
   padding: 0.8rem 2.4rem;
-  border-radius: 60px;
+  border-radius: 8px;
   transition: all 0.25s ease;
 }
 
@@ -136,6 +136,7 @@ li,
   font-size: 1.9rem;
   color: var(--ink);
   text-decoration: none;
+  line-height: 1;
 }
 
 .navbar-brand i {
@@ -154,11 +155,36 @@ li,
   border-radius: 40px;
   transition: 0.15s;
   font-size: 0.95rem;
+  position: relative;
 }
 
 .nav-link:hover {
   color: var(--ink) !important;
-  background: rgba(30, 28, 26, 0.04);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: all 0.25s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+  width: 60%;
+}
+
+.scroll-link.active::after {
+  width: 60%;
+}
+
+.scroll-link.active {
+  color: var(--ink) !important;
 }
 
 .nav-cta {
@@ -166,9 +192,10 @@ li,
 }
 
 .magazine-card {
+  position: relative;
   background: var(--card-bg);
   border: 1px solid var(--border-light);
-  border-radius: 28px;
+  border-radius: 8px;
   padding: 2.2rem 2rem;
   transition: all 0.25s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
@@ -178,6 +205,18 @@ li,
   border-color: #C9C0B4;
   box-shadow: 0 16px 40px -12px rgba(30, 28, 26, 0.06);
   transform: translateY(-4px);
+}
+
+.card-number {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  letter-spacing: 0.04em;
+  line-height: 1;
 }
 
 .feature-icon {
@@ -196,10 +235,10 @@ li,
 .chip-badge {
   background: var(--milk-warm);
   border: 1px solid var(--border-light);
-  border-radius: 60px;
-  padding: 0.3rem 1.2rem;
-  font-size: 0.8rem;
-  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.35rem 1.3rem;
+  font-size: 0.85rem;
+  font-weight: 700;
   color: var(--ink-soft);
   letter-spacing: 0;
   display: inline-block;
@@ -242,7 +281,6 @@ li,
   background: var(--milk-light);
   border-radius: 28px;
   padding: 24px 20px;
-  min-height: 400px;
   border: 1px solid #F0EBE3;
 }
 
@@ -268,6 +306,43 @@ li,
 
 .chat-bubble-narrow {
   max-width: 70%;
+}
+
+.mockup-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFFFF;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 8px 12px;
+}
+
+.mockup-input-text {
+  flex: 1;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.mockup-send-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--ink);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.mockup-send-btn:hover {
+  background: #2D2A26;
+  transform: scale(1.05);
 }
 
 .chat-avatar {
@@ -308,15 +383,6 @@ li,
   line-height: 1.6;
 }
 
-.cta-card {
-  border-radius: 48px;
-  background: #FDFCF9;
-}
-
-.cta-copy {
-  max-width: 480px;
-}
-
 .footer {
   border-top: 1px solid var(--border-light);
   background: var(--milk-light);
@@ -327,16 +393,191 @@ li,
   font-size: 0.9rem;
 }
 
+/* ─── Tablet (max-width: 992px) ─── */
+@media (max-width: 992px) {
+  .hero-title {
+    font-size: 3.4rem;
+  }
+
+  .hero-desc {
+    font-size: 1.1rem;
+  }
+
+  .mockup-slim {
+    max-width: 340px;
+  }
+
+  .display-3 {
+    font-size: calc(1.6rem + 2.4vw);
+  }
+
+  .display-4 {
+    font-size: calc(1.4rem + 2vw);
+  }
+}
+
+/* ─── Tablet Portrait (max-width: 768px) ─── */
 @media (max-width: 768px) {
   .hero-title {
     font-size: 2.8rem;
   }
 
   .hero-section {
-    padding: 6rem 0 2rem;
+    padding: 5rem 0 2rem;
+  }
+
+  .hero-desc {
+    max-width: 100%;
   }
 
   .magazine-card {
     padding: 1.8rem 1.5rem;
+  }
+
+  .card-number {
+    top: 10px;
+    right: 12px;
+    font-size: 0.7rem;
+  }
+
+  .mockup-slim {
+    max-width: 100%;
+    margin-top: 2rem;
+  }
+
+  .mockup-slim .inner {
+    min-height: auto;
+    padding: 20px 16px;
+  }
+
+  .navbar-brand {
+    font-size: 1.6rem;
+  }
+
+  .footer .row {
+    text-align: center;
+  }
+
+  .footer .text-md-end {
+    text-align: center !important;
+    margin-top: 1rem;
+  }
+}
+
+/* ─── Phone (max-width: 576px) ─── */
+@media (max-width: 576px) {
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-section {
+    padding: 5rem 0 1.5rem;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+  }
+
+  .hero-section .btn {
+    width: 100%;
+    padding: 0.7rem 1.5rem;
+  }
+
+  .magazine-card {
+    padding: 1.5rem 1.2rem;
+  }
+
+  .card-number {
+    top: 8px;
+    right: 10px;
+    font-size: 0.65rem;
+  }
+
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.5rem;
+    border-radius: 14px;
+  }
+
+  .chip-badge {
+    font-size: 0.78rem;
+    padding: 0.25rem 1rem;
+  }
+
+  .mockup-slim {
+    border-radius: 28px;
+    padding: 12px 10px;
+  }
+
+  .mockup-slim .inner {
+    border-radius: 20px;
+    padding: 16px 14px;
+  }
+
+  .chat-bubble {
+    font-size: 0.85rem;
+    padding: 10px 14px;
+    max-width: 90%;
+  }
+
+  .display-3 {
+    font-size: 1.8rem;
+  }
+
+  .display-4 {
+    font-size: 1.6rem;
+  }
+
+  .cta-section .btn-ink,
+  .cta-section .btn-outline-ink {
+    width: 100%;
+    padding: 0.7rem 1.5rem;
+  }
+
+  .hero-section ~ section {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+
+  .navbar .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+/* ─── Small Phone (max-width: 400px) ─── */
+@media (max-width: 400px) {
+  .hero-title {
+    font-size: 1.75rem;
+  }
+
+  .hero-section {
+    padding: 4.5rem 0 1rem;
+  }
+
+  .hero-desc {
+    font-size: 0.92rem;
+  }
+
+  .chip-badge {
+    font-size: 0.72rem;
+    padding: 0.2rem 0.85rem;
+  }
+
+  .magazine-card {
+    padding: 1.2rem 1rem;
+  }
+
+  .display-3 {
+    font-size: 1.5rem;
+  }
+
+  .display-4 {
+    font-size: 1.35rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.4rem;
   }
 }

@@ -1,31 +1,32 @@
-<%@ Page Title="Relay - intelligent chat" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="relay_chat._Default" %>
+<%@ Page Title="Relay - real-time messaging" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="relay_chat._Default" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
   <section class="hero-section">
     <div class="container">
-      <div class="row align-items-center g-5">
+      <div class="row align-items-center g-lg-5">
         <div class="col-lg-6">
           <div class="chip-badge mb-3">
-            <i class="bi bi-dot me-1"></i> v3.0 - real-time
+            <i class="bi bi-dot me-1"></i> real-time messaging
           </div>
           <h1 class="hero-title">
-            Conversations <br /><span class="highlight">with clarity.</span>
+            Real-time <br /><span class="highlight">conversations.</span>
           </h1>
           <p class="hero-desc mt-3">
-            Relay is the intelligent chat for teams, thinkers, and creators.
-            Minimal, secure, and built for focus.
+            Relay is a real-time messaging app. Create an account, find someone to talk to,
+            and start chatting instantly &mdash; with typing indicators, online presence, and read receipts.
           </p>
           <div class="d-flex flex-wrap gap-3 mt-4">
-            <a href="#" class="btn btn-ink px-5 py-3"><i class="bi bi-arrow-right-circle me-2"></i>Start relaying</a>
-            <a href="#" class="btn btn-outline-ink px-5 py-3"><i class="bi bi-play-circle me-2"></i>See it live</a>
+            <a href="Register" class="btn btn-ink px-5 py-3"><i class="bi bi-arrow-right-circle me-2"></i>Start relaying</a>
+            <a href="Login" class="btn btn-outline-ink px-5 py-3"><i class="bi bi-chat-dots me-2"></i>Go to your chats</a>
           </div>
           <div class="mt-5 d-flex flex-wrap align-items-center gap-4 text-muted small">
-            <span><i class="bi bi-check-circle-fill text-accent me-1"></i> 256-bit encryption</span>
-            <span><i class="bi bi-clock-fill text-accent me-1"></i> 99.9% uptime</span>
+            <span><i class="bi bi-lightning-fill text-accent me-1"></i> Live via WebSockets</span>
+            <span><i class="bi bi-pencil text-accent me-1"></i> Typing indicators</span>
+            <span><i class="bi bi-check2-all text-accent me-1"></i> Read receipts</span>
           </div>
         </div>
         <div class="col-lg-6">
-          <div class="mockup-slim mx-auto">
+          <div class="mockup-slim ms-auto">
             <div class="inner">
               <div class="d-flex align-items-center gap-2 mb-3">
                 <div class="chat-avatar chat-avatar-muted">R</div>
@@ -37,10 +38,9 @@
                 <div class="chat-bubble self">Just pushed revisions - clean &amp; sharp.</div>
                 <div class="chat-bubble chat-bubble-narrow">Let's review together</div>
                 <div class="chat-bubble self chat-bubble-narrow">Relay call in 5 min</div>
-                <div class="mt-3 d-flex gap-1">
-                  <span class="badge bg-milk-warm text-ink border border-milk px-3 py-2 rounded-pill relay-heading"><i class="bi bi-mic me-1"></i>voice</span>
-                  <span class="badge bg-milk-warm text-ink border border-milk px-3 py-2 rounded-pill relay-heading"><i class="bi bi-camera-video me-1"></i>video</span>
-                  <span class="badge bg-ink text-white px-4 py-2 rounded-pill ms-auto relay-heading"><i class="bi bi-send"></i></span>
+                <div class="mockup-input mt-3">
+                  <span class="mockup-input-text">Type a message...</span>
+                  <span class="mockup-send-btn"><i class="bi bi-send-fill"></i></span>
                 </div>
               </div>
             </div>
@@ -50,112 +50,116 @@
     </div>
   </section>
 
-  <section class="py-5" id="features">
+  <section class="py-5" id="features" style="border-top: 1px solid var(--border-light);">
     <div class="container">
       <div class="row mb-4">
         <div class="col-lg-8">
-          <span class="chip-badge mb-2"><i class="bi bi-grid-3x3-gap-fill me-1"></i> core</span>
-          <h2 class="display-4 relay-heading">Designed for <span class="text-accent">depth</span></h2>
-          <p class="text-muted relay-copy">Every detail refined for thoughtful communication.</p>
+          <span class="chip-badge mb-2"><i class="bi bi-grid-3x3-gap-fill me-1"></i> Features</span>
+          <h2 class="display-3 relay-heading fw-bold">Built for <span class="text-accent">real-time</span></h2>
+          <p class="text-muted relay-copy" style="font-size: 1.15rem;">Everything you need for live conversation, built right in.</p>
         </div>
       </div>
       <div class="row g-4">
         <div class="col-md-4">
           <div class="magazine-card h-100">
+            <span class="card-number">01</span>
+            <div class="feature-icon mb-3"><i class="bi bi-pencil"></i></div>
+            <h4 class="relay-heading">Typing indicators</h4>
+            <p class="text-muted small relay-copy">See when someone is composing a reply &mdash; no more wondering if they saw your message.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="magazine-card h-100">
+            <span class="card-number">02</span>
+            <div class="feature-icon mb-3"><i class="bi bi-circle-fill" style="color: #22c55e;"></i></div>
+            <h4 class="relay-heading">Online presence</h4>
+            <p class="text-muted small relay-copy">Green dots show who's available and ready to talk, right in your conversation list.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="magazine-card h-100">
+            <span class="card-number">03</span>
+            <div class="feature-icon mb-3"><i class="bi bi-search"></i></div>
+            <h4 class="relay-heading">User search</h4>
+            <p class="text-muted small relay-copy">Find anyone by username or display name and start a conversation instantly.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="magazine-card h-100">
+            <span class="card-number">04</span>
+            <div class="feature-icon mb-3"><i class="bi bi-check2-all"></i></div>
+            <h4 class="relay-heading">Read receipts</h4>
+            <p class="text-muted small relay-copy">Single check means delivered, double check means read &mdash; always know the status.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="magazine-card h-100">
+            <span class="card-number">05</span>
+            <div class="feature-icon mb-3"><i class="bi bi-lightning-fill"></i></div>
+            <h4 class="relay-heading">WebSocket delivery</h4>
+            <p class="text-muted small relay-copy">Messages arrive instantly via SignalR WebSockets &mdash; no page refresh, no polling.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="magazine-card h-100">
+            <span class="card-number">06</span>
             <div class="feature-icon mb-3"><i class="bi bi-chat-dots"></i></div>
-            <h4 class="relay-heading">Threads &amp; replies</h4>
-            <p class="text-muted small relay-copy">Keep conversations structured with nested replies and smart mentions.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="magazine-card h-100">
-            <div class="feature-icon mb-3"><i class="bi bi-shield-check"></i></div>
-            <h4 class="relay-heading">End-to-end encrypted</h4>
-            <p class="text-muted small relay-copy">Messages are private by default. Modern E2EE with zero compromise.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="magazine-card h-100">
-            <div class="feature-icon mb-3"><i class="bi bi-palette"></i></div>
-            <h4 class="relay-heading">Quiet design</h4>
-            <p class="text-muted small relay-copy">Light, warm, and distraction-free. Choose your reading mode.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="magazine-card h-100">
-            <div class="feature-icon mb-3"><i class="bi bi-file-earmark-code"></i></div>
-            <h4 class="relay-heading">Developer API</h4>
-            <p class="text-muted small relay-copy">Extend with WebSocket &amp; REST APIs. Build your own integrations.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="magazine-card h-100">
-            <div class="feature-icon mb-3"><i class="bi bi-people"></i></div>
-            <h4 class="relay-heading">Group calls</h4>
-            <p class="text-muted small relay-copy">HD voice &amp; video for up to 50 participants. Crisp and clear.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="magazine-card h-100">
-            <div class="feature-icon mb-3"><i class="bi bi-cloud-check"></i></div>
-            <h4 class="relay-heading">Sync across devices</h4>
-            <p class="text-muted small relay-copy">Continuity across web, desktop, and mobile.</p>
+            <h4 class="relay-heading">Private conversations</h4>
+            <p class="text-muted small relay-copy">One-on-one chats created in one click. Search for someone and start talking.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="py-5">
+  <section class="py-5" id="how-it-works" style="border-top: 1px solid var(--border-light);">
     <div class="container">
       <div class="row mb-4">
         <div class="col-lg-8">
-          <span class="chip-badge"><i class="bi bi-quote me-1"></i> voices</span>
-          <h2 class="display-4 relay-heading">What <span class="text-accent">readers</span> say</h2>
+          <span class="chip-badge mb-2"><i class="bi bi-arrow-right-circle me-1"></i> how it works</span>
+          <h2 class="display-4 relay-heading">Start chatting in <span class="text-accent">3 steps</span></h2>
+          <p class="text-muted relay-copy">From sign-up to first message in under a minute.</p>
         </div>
       </div>
-      <div class="row g-4">
+      <div class="row g-4 justify-content-center">
         <div class="col-md-4">
-          <div class="testimonial-card">
-            <div class="d-flex gap-2 align-items-center mb-3">
-              <div class="chat-avatar chat-avatar-muted">JD</div>
-              <div><strong class="relay-heading">Jessie D.</strong><br /><span class="text-muted small relay-copy">CTO, Layer5</span></div>
-            </div>
-            <p class="testimonial-text mb-0">"Relay replaced three tools for us. The UI is smooth and the encryption is top-notch."</p>
+          <div class="magazine-card h-100">
+            <span class="card-number">01</span>
+            <div class="feature-icon mb-3"><i class="bi bi-person-plus"></i></div>
+            <h4 class="relay-heading">Create your account</h4>
+            <p class="text-muted small relay-copy mb-0">Sign up with a username and password in seconds. No email verification, no waiting.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="testimonial-card">
-            <div class="d-flex gap-2 align-items-center mb-3">
-              <div class="chat-avatar chat-avatar-muted">MR</div>
-              <div><strong class="relay-heading">Marcus R.</strong><br /><span class="text-muted small relay-copy">Product @ Orbit</span></div>
-            </div>
-            <p class="testimonial-text mb-0">"The best chat experience on the web. I love how light and fast it feels, even on mobile."</p>
+          <div class="magazine-card h-100">
+            <span class="card-number">02</span>
+            <div class="feature-icon mb-3"><i class="bi bi-search"></i></div>
+            <h4 class="relay-heading">Find someone</h4>
+            <p class="text-muted small relay-copy mb-0">Search by username or display name to find people and start a conversation with one click.</p>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="testimonial-card">
-            <div class="d-flex gap-2 align-items-center mb-3">
-              <div class="chat-avatar chat-avatar-muted">AL</div>
-              <div><strong class="relay-heading">Aiko L.</strong><br /><span class="text-muted small relay-copy">Design lead</span></div>
-            </div>
-            <p class="testimonial-text mb-0">"Relay's design system is a dream. It's the first chat app that feels like a native experience."</p>
+          <div class="magazine-card h-100">
+            <span class="card-number">03</span>
+            <div class="feature-icon mb-3"><i class="bi bi-chat-dots-fill"></i></div>
+            <h4 class="relay-heading">Start relaying</h4>
+            <p class="text-muted small relay-copy mb-0">Send live messages with typing indicators, read receipts, and instant delivery via WebSockets.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="py-5 my-3">
+  <section class="py-5 text-center cta-section" style="border-top: 1px solid var(--border-light); background: var(--milk-light);">
     <div class="container">
-      <div class="magazine-card cta-card p-5 text-center">
-        <h2 class="display-3 relay-heading">Start <span class="text-accent">relaying</span></h2>
-        <p class="text-muted mb-4 mx-auto relay-copy cta-copy">Join a community that values clarity and connection.</p>
+      <div class="py-4">
+        <h2 class="display-3 relay-heading fw-bold">Start <span class="text-accent">relaying</span></h2>
+        <p class="text-muted mb-4 mx-auto relay-copy" style="max-width: 480px; font-size: 1.15rem;">Create an account and start chatting in seconds &mdash; no setup required.</p>
         <div class="d-flex flex-wrap justify-content-center gap-3">
-          <a href="#" class="btn btn-ink px-5 py-3"><i class="bi bi-download me-2"></i>Free download</a>
-          <a href="#" class="btn btn-outline-ink px-5 py-3"><i class="bi bi-browser-chrome me-2"></i>Open in browser</a>
+          <a href="Register" class="btn btn-ink px-5 py-3"><i class="bi bi-chat-dots-fill me-2"></i>Join the conversation</a>
+          <a href="Login" class="btn btn-outline-ink px-5 py-3"><i class="bi bi-arrow-right-circle me-2"></i>Continue chatting</a>
         </div>
-        <p class="mt-3 small text-muted relay-copy">No credit card - 14-day premium trial</p>
+        <p class="mt-3 small text-muted relay-copy">Start chatting in seconds &mdash; it's free</p>
       </div>
     </div>
   </section>

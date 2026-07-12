@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Optimization;
 using System.Web.Routing;
-using System.Web.Security;
-using System.Web.SessionState;
 
 namespace relay_chat
 {
@@ -13,7 +9,10 @@ namespace relay_chat
     {
         void Application_Start(object sender, EventArgs e)
         {
-            // Code that runs on application startup
+            // Initialize database
+            DatabaseConfig.Initialize();
+
+            // Register routes and bundles
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }

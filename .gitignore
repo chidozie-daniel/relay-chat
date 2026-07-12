@@ -1,0 +1,55 @@
+# ─── Visual Studio ───
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# ─── Build results ───
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+# ─── NuGet ───
+packages/
+*.nupkg
+project.lock.json
+
+# ─── ASP.NET ───
+*.dll
+*.exe
+*.pdb
+*.dll.config
+*.cache
+*.scc
+App_Data/*.mdf
+App_Data/*.ldf
+
+# ─── Visual Studio generated files ───
+*.tlog
+*.log
+*.lastbuildstate
+*.AssemblyAttribute.cs
+*.csproj.FileListAbsolute.txt
+*.csproj.GenerateResourceInfo.cache
+*.csproj.Up2Date
+*.sbr
+*.etl
+*.tlh
+*.tmp
+*.metagen
+*.rsuser
+
+# ─── Testing ───
+TestResults/
+*.coverage
+*.trx
+
+# ─── OS files ───
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
