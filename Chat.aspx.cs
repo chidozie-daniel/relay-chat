@@ -63,7 +63,9 @@ namespace relay_chat
             else if (Request.QueryString["conversationId"] != null)
             {
                 int.TryParse(Request.QueryString["conversationId"], out int convId);
-                RenderMessageHtml(convId);
+                int.TryParse(Request.QueryString["page"] ?? "1", out int page);
+                if (page < 1) page = 1;
+                RenderMessageHtml(convId, page);
             }
         }
 
@@ -120,19 +122,29 @@ namespace relay_chat
         /// <summary>
         /// Renders messages HTML for a conversation. Called from the ASPX page and AJAX.
         /// </summary>
-        public string RenderMessages()
+        public string RenderMessages(int page = 1)
         {
             var html = new System.Text.StringBuilder();
 
             if (SelectedConversationId <= 0)
                 return "";
 
-            var messages = _messageService.GetMessages(SelectedConversationId);
+            var messages = _messageService.GetMessages(SelectedConversationId, page);
+            bool hasMore = messages.Count == 50; // page size
 
-            if (messages.Count == 0)
+            if (page == 1 && messages.Count == 0)
             {
                 html.Append("<div class=\"text-center text-muted py-5 relay-copy\">No messages yet. Start the conversation!</div>");
                 return html.ToString();
+            }
+
+            // "Load older messages" button — shown at top when there may be more
+            if (hasMore)
+            {
+                html.Append($"<div class=\"load-more-wrapper\" id=\"loadMoreWrapper-{page}\">" +
+                    $"<button class=\"btn btn-outline-ink btn-sm load-more-btn\" " +
+                    $"onclick=\"loadOlderMessages({SelectedConversationId}, {page + 1}, this)\">Load older messages</button>" +
+                    $"</div>");
             }
 
             DateTime? lastDate = null;
@@ -162,11 +174,11 @@ namespace relay_chat
             return html.ToString();
         }
 
-        private void RenderMessageHtml(int conversationId)
+        private void RenderMessageHtml(int conversationId, int page = 1)
         {
             SelectedConversationId = conversationId;
             Response.ContentType = "text/html";
-            Response.Write(RenderMessages());
+            Response.Write(RenderMessages(page));
         }
 
         private void RenderSearchResults(string query)

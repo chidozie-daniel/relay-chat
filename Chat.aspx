@@ -54,7 +54,7 @@
         </div>
 
         <div class="chat-messages" id="chatMessages">
-          <%= RenderMessages() %>
+          <%= RenderMessages(1) %>
         </div>
 
         <div class="chat-input-area">
@@ -226,7 +226,7 @@
         scrollToBottom();
       } else {
         $('#chatMessages').html('<div class="text-center text-muted py-5 relay-copy"><i class="bi bi-arrow-clockwise me-2"></i>Loading messages...</div>');
-        $.get('Chat.aspx?conversationId=' + convId + '&ajax=1', function (data) {
+        $.get('Chat.aspx?conversationId=' + convId + '&page=1&ajax=1', function (data) {
           $('#chatMessages').html(data);
           scrollToBottom();
         });
@@ -329,6 +329,26 @@
     }
 
     // ─── Utilities ───
+
+    function loadOlderMessages(convId, page, btn) {
+      var $btn = $(btn);
+      var $wrapper = $btn.closest('.load-more-wrapper');
+      $btn.prop('disabled', true).text('Loading...');
+
+      var container = $('#chatMessages');
+      var scrollHeightBefore = container[0].scrollHeight;
+
+      $.get('Chat.aspx?conversationId=' + convId + '&page=' + page + '&ajax=1', function (data) {
+        $wrapper.remove();
+        container.prepend(data);
+
+        // Maintain scroll position so user doesn't jump
+        var scrollHeightAfter = container[0].scrollHeight;
+        container.scrollTop(scrollHeightAfter - scrollHeightBefore);
+      }).fail(function () {
+        $btn.prop('disabled', false).text('Load older messages');
+      });
+    }
 
     function autoResize(el) {
       el.style.height = 'auto';
