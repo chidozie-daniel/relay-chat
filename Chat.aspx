@@ -74,12 +74,40 @@
     <div class="modal-content">
       <button class="close-modal" onclick="closeNewChatModal()"><i class="bi bi-x-lg"></i></button>
       <h4>New conversation</h4>
+
+      <!-- Mode toggle -->
+      <div class="chat-mode-toggle mb-3">
+        <button class="mode-btn active" id="modeDirect" onclick="setMode('direct')">
+          <i class="bi bi-person"></i> Direct
+        </button>
+        <button class="mode-btn" id="modeGroup" onclick="setMode('group')">
+          <i class="bi bi-people"></i> Group
+        </button>
+      </div>
+
+      <!-- Group name (group mode only) -->
+      <div id="groupNameWrapper" style="display:none;" class="mb-2">
+        <input type="text" id="groupName" class="form-control" placeholder="Group name..." maxlength="200" />
+        <div id="groupNameError" class="text-danger small mt-1" style="display:none;"></div>
+      </div>
+
       <div class="search-box px-0">
         <input type="text" id="userSearch" placeholder="Search by username or display name..."
           oninput="searchUsers(this.value)" autocomplete="off" />
       </div>
+
+      <!-- Group selected members -->
+      <div id="selectedMembers" style="display:none;" class="selected-members-list mt-2"></div>
+
       <div class="search-results" id="searchResults">
         <p class="text-muted small relay-copy text-center py-3">Type to search for users</p>
+      </div>
+
+      <!-- Group create button -->
+      <div id="createGroupWrapper" style="display:none;" class="mt-3">
+        <button class="btn btn-ink w-100" onclick="submitCreateGroup()">
+          <i class="bi bi-people-fill me-2"></i>Create group
+        </button>
       </div>
     </div>
   </div>
@@ -292,8 +320,31 @@
 
     // ─── New Chat Modal ───
 
+    var currentMode = 'direct';
+    var selectedGroupMembers = {}; // { userId: displayName }
+
+    function setMode(mode) {
+      currentMode = mode;
+      $('#modeDirect').toggleClass('active', mode === 'direct');
+      $('#modeGroup').toggleClass('active', mode === 'group');
+      $('#groupNameWrapper').toggle(mode === 'group');
+      $('#selectedMembers').toggle(mode === 'group');
+      $('#createGroupWrapper').toggle(mode === 'group' && Object.keys(selectedGroupMembers).length > 0);
+      $('#userSearch').val('');
+      $('#searchResults').html('<p class="text-muted small relay-copy text-center py-3">Type to search for users</p>');
+    }
+
     function openNewChatModal() {
       $('#newChatModal').addClass('visible');
+      currentMode = 'direct';
+      selectedGroupMembers = {};
+      $('#modeDirect').addClass('active');
+      $('#modeGroup').removeClass('active');
+      $('#groupNameWrapper').hide();
+      $('#groupName').val('');
+      $('#groupNameError').hide();
+      $('#selectedMembers').hide().empty();
+      $('#createGroupWrapper').hide();
       $('#userSearch').val('').focus();
       $('#searchResults').html('<p class="text-muted small relay-copy text-center py-3">Type to search for users</p>');
     }
@@ -314,17 +365,78 @@
       searchTimeout = setTimeout(function () {
         $.get('Chat.aspx?search=' + encodeURIComponent(query) + '&ajax=1', function (data) {
           $('#searchResults').html(data);
+          // Mark already-selected members
+          if (currentMode === 'group') {
+            Object.keys(selectedGroupMembers).forEach(function (uid) {
+              $('#searchResults [data-userid="' + uid + '"]').addClass('selected');
+            });
+          }
         });
       }, 300);
     }
 
     function startConversation(userId, username) {
+      if (currentMode === 'group') {
+        toggleGroupMember(userId, username);
+        return;
+      }
       closeNewChatModal();
-      // Navigate to conversation with this user
-      $.get('Chat.aspx?start=' + userId + '&ajax=1', function (data) {
+      $.getJSON('Chat.aspx?start=' + userId + '&ajax=1', function (data) {
         if (data && data.conversationId) {
           selectConversation(data.conversationId, username, userId);
         }
+      });
+    }
+
+    function toggleGroupMember(userId, displayName) {
+      if (selectedGroupMembers[userId]) {
+        delete selectedGroupMembers[userId];
+      } else {
+        selectedGroupMembers[userId] = displayName;
+      }
+      // Toggle visual selected state on search result
+      $('#searchResults [data-userid="' + userId + '"]').toggleClass('selected', !!selectedGroupMembers[userId]);
+      renderSelectedMembers();
+    }
+
+    function renderSelectedMembers() {
+      var members = Object.keys(selectedGroupMembers);
+      var $list = $('#selectedMembers');
+      $list.empty();
+      if (members.length === 0) {
+        $list.hide();
+        $('#createGroupWrapper').hide();
+        return;
+      }
+      $list.show();
+      members.forEach(function (uid) {
+        var name = selectedGroupMembers[uid];
+        var $tag = $('<span class="member-tag">' + escapeHtml(name) +
+          ' <button onclick="toggleGroupMember(' + uid + ', \'' + escapeHtml(name) + '\')">&times;</button></span>');
+        $list.append($tag);
+      });
+      $('#createGroupWrapper').show();
+    }
+
+    function submitCreateGroup() {
+      var name = $('#groupName').val().trim();
+      if (!name) {
+        $('#groupNameError').text('Please enter a group name.').show();
+        return;
+      }
+      $('#groupNameError').hide();
+
+      var memberIds = Object.keys(selectedGroupMembers).join(',');
+
+      $.post('Chat.aspx?createGroup=1&ajax=1', { name: name, memberIds: memberIds }, function (data) {
+        if (data && data.conversationId) {
+          closeNewChatModal();
+          selectConversation(data.conversationId, data.name, '');
+          location.reload(); // Refresh sidebar to show new group
+        }
+      }, 'json').fail(function (xhr) {
+        var err = xhr.responseJSON && xhr.responseJSON.error ? xhr.responseJSON.error : 'Failed to create group.';
+        $('#groupNameError').text(err).show();
       });
     }
 

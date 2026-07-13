@@ -51,6 +51,7 @@ namespace relay_chat
         {
             string search = Request.QueryString["search"];
             string startConv = Request.QueryString["start"];
+            string createGroup = Request.QueryString["createGroup"];
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -59,6 +60,10 @@ namespace relay_chat
             else if (!string.IsNullOrEmpty(startConv) && int.TryParse(startConv, out int targetUserId))
             {
                 StartConversation(targetUserId);
+            }
+            else if (!string.IsNullOrEmpty(createGroup) && createGroup == "1")
+            {
+                CreateGroupConversation();
             }
             else if (Request.QueryString["conversationId"] != null)
             {
@@ -138,6 +143,14 @@ namespace relay_chat
                 return html.ToString();
             }
 
+            // Determine if this is a group conversation
+            bool isGroup = false;
+            if (messages.Count > 0)
+            {
+                var conv = messages[0].Conversation;
+                isGroup = conv != null && conv.Type == 1;
+            }
+
             // "Load older messages" button — shown at top when there may be more
             if (hasMore)
             {
@@ -165,8 +178,15 @@ namespace relay_chat
                     ? " <span class=\"message-read\"><i class=\"bi bi-check-all\"></i></span>"
                     : isSent ? " <span class=\"message-read\"><i class=\"bi bi-check\"></i></span>" : "";
 
+                // Show sender name in group chats for received messages
+                string senderLabel = "";
+                if (isGroup && !isSent && msg.Sender != null)
+                {
+                    senderLabel = $"<div class=\"message-sender\">{HttpUtility.HtmlEncode(msg.Sender.DisplayName)}</div>";
+                }
+
                 html.Append($"<div class=\"message-row {bubbleClass}\">" +
-                    $"<div class=\"message-bubble\">{HttpUtility.HtmlEncode(msg.Content)}" +
+                    $"<div class=\"message-bubble\">{senderLabel}{HttpUtility.HtmlEncode(msg.Content)}" +
                     $"<div class=\"message-time\">{time}{readIcon}</div>" +
                     $"</div></div>");
             }
@@ -198,10 +218,13 @@ namespace relay_chat
                 foreach (var user in results)
                 {
                     string letter = user.DisplayName.Length > 0 ? user.DisplayName[0].ToString().ToUpper() : "?";
-                    html.Append($"<div class=\"search-result-item\" onclick=\"startConversation({user.Id},'{HttpUtility.HtmlAttributeEncode(user.DisplayName)}')\">" +
+                    // onclick calls startConversation which handles both direct and group modes
+                    html.Append($"<div class=\"search-result-item\" data-userid=\"{user.Id}\" " +
+                        $"onclick=\"startConversation({user.Id},'{HttpUtility.HtmlAttributeEncode(user.DisplayName)}')\">" +
                         $"<div class=\"conv-avatar\">{letter}</div>" +
-                        $"<div><strong class=\"relay-heading\">{HttpUtility.HtmlEncode(user.DisplayName)}</strong><br />" +
+                        $"<div style=\"flex:1\"><strong class=\"relay-heading\">{HttpUtility.HtmlEncode(user.DisplayName)}</strong><br />" +
                         $"<span class=\"text-muted small relay-copy\">@{HttpUtility.HtmlEncode(user.Username)}</span></div>" +
+                        $"<span class=\"member-check-icon\"><i class=\"bi bi-check-circle-fill\"></i></span>" +
                         $"</div>");
                 }
             }
@@ -216,6 +239,46 @@ namespace relay_chat
 
             var serializer = new JavaScriptSerializer();
             string json = serializer.Serialize(new { conversationId = conversation.Id });
+
+            Response.ContentType = "application/json";
+            Response.Write(json);
+        }
+
+        private void CreateGroupConversation()
+        {
+            string name = Request.Form["name"]?.Trim();
+            string memberIdsRaw = Request.Form["memberIds"];
+
+            if (string.IsNullOrEmpty(name) || name.Length > 200)
+            {
+                Response.StatusCode = 400;
+                Response.ContentType = "application/json";
+                Response.Write("{\"error\":\"Group name is required (max 200 characters).\"}");
+                return;
+            }
+
+            var memberIds = new System.Collections.Generic.List<int>();
+            if (!string.IsNullOrEmpty(memberIdsRaw))
+            {
+                foreach (var part in memberIdsRaw.Split(','))
+                {
+                    if (int.TryParse(part.Trim(), out int mid) && mid != CurrentUserId)
+                        memberIds.Add(mid);
+                }
+            }
+
+            if (memberIds.Count == 0)
+            {
+                Response.StatusCode = 400;
+                Response.ContentType = "application/json";
+                Response.Write("{\"error\":\"Add at least one member to the group.\"}");
+                return;
+            }
+
+            var conversation = _messageService.CreateGroupConversation(name, CurrentUserId, memberIds);
+
+            var serializer = new JavaScriptSerializer();
+            string json = serializer.Serialize(new { conversationId = conversation.Id, name = conversation.Name });
 
             Response.ContentType = "application/json";
             Response.Write(json);

@@ -83,6 +83,42 @@ namespace relay_chat.Services
         }
 
         /// <summary>
+        /// Creates a new group conversation with the given name and participant IDs.
+        /// The creator is always added as a participant.
+        /// </summary>
+        public Conversation CreateGroupConversation(string name, int creatorId, List<int> memberIds)
+        {
+            var conversation = new Conversation
+            {
+                Type = 1, // Group
+                Name = name,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Conversations.Add(conversation);
+            _context.SaveChanges();
+
+            // Always include the creator
+            var allMembers = new List<int>(memberIds);
+            if (!allMembers.Contains(creatorId))
+                allMembers.Insert(0, creatorId);
+
+            foreach (var userId in allMembers)
+            {
+                _context.ConversationParticipants.Add(new ConversationParticipant
+                {
+                    ConversationId = conversation.Id,
+                    UserId = userId,
+                    JoinedAt = DateTime.UtcNow
+                });
+            }
+
+            _context.SaveChanges();
+
+            return conversation;
+        }
+
+        /// <summary>
         /// Creates a new 1-on-1 conversation between two users, or returns existing one.
         /// </summary>
         public Conversation GetOrCreateOneOnOneConversation(int userId1, int userId2)

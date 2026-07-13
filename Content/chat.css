@@ -619,3 +619,84 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* ─── Group chat ─── */
+.message-sender {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-family: 'Sora', sans-serif;
+  margin-bottom: 3px;
+}
+
+/* ─── New chat modal: mode toggle ─── */
+.chat-mode-toggle {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 0.45rem 0;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  background: transparent;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mode-btn.active {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+/* ─── Selected group members ─── */
+.selected-members-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.5rem 0;
+}
+
+.member-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--milk-warm);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.82rem;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  color: var(--ink-soft);
+}
+
+.member-tag button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.member-tag button:hover {
+  color: var(--ink);
+}
+
+/* ─── Search result check icon (group mode) ─── */
+.member-check-icon {
+  color: var(--border-light);
+  font-size: 1.1rem;
+  transition: color 0.15s;
+}
+
+.search-result-item.selected .member-check-icon {
+  color: #22c55e;
+}
