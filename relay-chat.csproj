@@ -144,6 +144,7 @@
 
     <Content Include="Content\relay.css" />
     <Content Include="Content\chat.css" />
+    <Content Include="Profile.aspx" />
     <Content Include="Chat.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Login.aspx" />
@@ -197,6 +198,13 @@
 
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Profile.aspx.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Profile.aspx.designer.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\DatabaseConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />

@@ -47,7 +47,7 @@
                             </AnonymousTemplate>
                             <LoggedInTemplate>
                                 <li class="nav-item"><a class="nav-link" href="Chat">Chats</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+                                <li class="nav-item"><a class="nav-link" href="Profile">Profile</a></li>
                                 <li class="nav-item"><a class="btn btn-outline-ink nav-cta ms-lg-2" href="Logout">Sign out</a></li>
                             </LoggedInTemplate>
                         </asp:LoginView>
